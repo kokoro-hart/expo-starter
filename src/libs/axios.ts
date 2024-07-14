@@ -1,4 +1,3 @@
-/* eslint @typescript-eslint/no-explicit-any: 0 */
 import Axios, { type AxiosError } from "axios";
 
 export const axios = Axios.create({
