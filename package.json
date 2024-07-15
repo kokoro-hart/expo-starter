@@ -12,6 +12,7 @@
     "test": "jest --watchAll",
     "lint:expo": "expo lint",
     "lint:es": "eslint ./src --ext .ts,.tsx --max-warnings=0 --cache --ignore-path .gitignore",
+    "format": "prettier ./src --write --ignore-path .gitignore",
     "check-types": "tsc --project tsconfig.json --pretty --noEmit",
     "validate": "lint-staged --no-stash"
   },
