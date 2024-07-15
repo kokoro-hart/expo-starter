@@ -5,7 +5,7 @@ import ErrorBoundary from "react-native-error-boundary";
 import { handleApiError } from "@/utils";
 
 import { Error } from "./Error";
-import { PageSpinner } from "./Spinner";
+import { PageIndicator } from "./Indicator";
 
 type SuspenseWithErrorBoundaryProps = PropsWithChildren<{
   loadingElement?: ComponentProps<typeof Suspense>["fallback"];
@@ -14,7 +14,7 @@ type SuspenseWithErrorBoundaryProps = PropsWithChildren<{
 
 export function SuspenseWithErrorBoundary({
   children,
-  loadingElement = <PageSpinner />,
+  loadingElement = <PageIndicator />,
   fallbackComponent,
 }: SuspenseWithErrorBoundaryProps) {
   return (
