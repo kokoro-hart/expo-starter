@@ -1,4 +1,5 @@
 import Axios, { AxiosError } from "axios";
+import Toast from "react-native-toast-message";
 
 type handleApiErrorOptions = {
   defaultMessage?: string;
@@ -13,18 +14,23 @@ export const handleApiError = (e: unknown | AxiosError, options: handleApiErrorO
           return error;
         });
       } else {
-        return e.response.data.error;
+        return e.response.data.error || e.message;
       }
-    } else if (e instanceof Error) {
-      return e.message;
     } else if (options.defaultMessage) {
       return options.defaultMessage;
     }
   })();
 
+  Toast.show({
+    type: "error",
+    text1: "エラーが発生しました",
+    text2: errorMessage,
+  });
+
   if (options.silent) {
     return errorMessage;
   }
 
+  console.error(e);
   throw new Error(errorMessage);
 };

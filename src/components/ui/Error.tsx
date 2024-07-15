@@ -17,8 +17,10 @@ export function Error({ heading = "エラーが発生しました", message }: E
 
 const styles = StyleSheet.create({
   container: {
+    padding: 12,
     display: "flex",
     flexDirection: "column",
+    gap: 2,
   },
   heading: {
     fontSize: 16,
