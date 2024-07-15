@@ -3,12 +3,12 @@ import { View, Text, FlatList, StyleSheet } from "react-native";
 
 import { SuspenseWithErrorBoundary } from "@/components";
 
-import { useGetPosts } from "../api";
-import { GetPostResponse } from "../types";
+import { useGetExamples } from "../api";
+import { GetExampleResponse } from "../types";
 
-type ItemProps = Pick<GetPostResponse, "title" | "body">;
+type ExampleItemProps = Pick<GetExampleResponse, "title" | "body">;
 
-function Item({ title, body }: ItemProps) {
+function ExampleItem({ title, body }: ExampleItemProps) {
   return (
     <View style={styles.item}>
       <Text style={styles.title}>{title}</Text>
@@ -18,12 +18,12 @@ function Item({ title, body }: ItemProps) {
 }
 
 export function ExampleContainer() {
-  const { data: posts } = useGetPosts();
+  const { data: posts } = useGetExamples();
   return (
     <View style={styles.container}>
       <FlatList
         data={posts}
-        renderItem={({ item }) => <Item {...item} />}
+        renderItem={({ item }) => <ExampleItem {...item} />}
         keyExtractor={({ id }) => id.toString()}
         contentContainerStyle={styles.listContent}
       />

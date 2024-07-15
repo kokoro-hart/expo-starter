@@ -2,20 +2,20 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { QueryConfig, axios } from "@/libs";
 
-import { GetPostsResponse } from "../types";
+import { GetExamplesResponse } from "../types";
 
-function getPosts(): Promise<GetPostsResponse> {
+function getExamples(): Promise<GetExamplesResponse> {
   return axios.get(`/posts`);
 }
 
-type UseGetPostsOptions = {
-  config?: QueryConfig<typeof getPosts>;
+type UseGetExamplesOptions = {
+  config?: QueryConfig<typeof getExamples>;
 };
 
-export function useGetPosts({ config }: UseGetPostsOptions = {}) {
+export function useGetExamples({ config }: UseGetExamplesOptions = {}) {
   return useSuspenseQuery({
-    queryKey: ["posts"],
-    queryFn: getPosts,
+    queryKey: ["examples"],
+    queryFn: getExamples,
     ...config,
   });
 }
