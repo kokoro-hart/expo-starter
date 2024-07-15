@@ -11,7 +11,8 @@ import { AxiosError } from "axios";
 
 const queryConfig: DefaultOptions = {
   queries: {
-    staleTime: Infinity,
+    staleTime: 0,
+    gcTime: Infinity,
     refetchOnWindowFocus: false,
     retry: false,
   },

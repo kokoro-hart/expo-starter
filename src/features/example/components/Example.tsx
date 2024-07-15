@@ -1,6 +1,8 @@
 import React from "react";
 import { View, Text, FlatList, StyleSheet } from "react-native";
 
+import { SuspenseWithErrorBoundary } from "@/components";
+
 import { useGetPosts } from "../api";
 import { GetPostResponse } from "../types";
 
@@ -15,7 +17,7 @@ function Item({ title, body }: ItemProps) {
   );
 }
 
-export function Example() {
+export function ExampleContainer() {
   const { data: posts } = useGetPosts();
   return (
     <View style={styles.container}>
@@ -23,9 +25,17 @@ export function Example() {
         data={posts}
         renderItem={({ item }) => <Item {...item} />}
         keyExtractor={({ id }) => id.toString()}
-        contentContainerStyle={styles.listContents}
+        contentContainerStyle={styles.listContent}
       />
     </View>
+  );
+}
+
+export function Example() {
+  return (
+    <SuspenseWithErrorBoundary>
+      <ExampleContainer />
+    </SuspenseWithErrorBoundary>
   );
 }
 
@@ -34,7 +44,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 12,
   },
-  listContents: {
+  listContent: {
     display: "flex",
     flexDirection: "column",
     gap: 12,

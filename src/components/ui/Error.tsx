@@ -1,6 +1,31 @@
-import React from "react";
-import { View } from "react-native";
+import React, { ReactNode } from "react";
+import { StyleSheet, Text, View } from "react-native";
 
-export function Error() {
-  return <View>Error</View>;
+type ErrorProps = {
+  heading?: string;
+  message: ReactNode;
+};
+
+export function Error({ heading = "エラーが発生しました", message }: ErrorProps) {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.heading}>{heading}</Text>
+      <Text style={styles.message}>{message}</Text>
+    </View>
+  );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    display: "flex",
+    flexDirection: "column",
+  },
+  heading: {
+    fontSize: 16,
+    textAlign: "center",
+  },
+  message: {
+    fontSize: 14,
+    textAlign: "center",
+  },
+});
