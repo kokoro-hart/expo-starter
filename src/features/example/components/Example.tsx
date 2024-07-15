@@ -1,48 +1,63 @@
-import React from "react";
-import { View, Text, FlatList, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import { View, Text, FlatList, StyleSheet, Pressable, Dimensions } from "react-native";
 
-import { SuspenseWithErrorBoundary } from "@/components";
+import { Modal, SuspenseWithErrorBoundary } from "@/components";
 
 import { useGetExamples } from "../api";
 import { GetExampleResponse } from "../types";
 
-type ExampleItemProps = Pick<GetExampleResponse, "title" | "body">;
+type ExampleItemProps = Pick<GetExampleResponse, "title">;
 
-function ExampleItem({ title, body }: ExampleItemProps) {
+function ExampleItem({ title }: ExampleItemProps) {
   return (
     <View style={styles.item}>
       <Text style={styles.title}>{title}</Text>
-      <Text style={styles.body}>{body}</Text>
     </View>
   );
 }
 
-export function ExampleContainer() {
-  const { data: posts } = useGetExamples();
+export function ExampleList() {
+  const { data: examples } = useGetExamples();
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={posts}
-        renderItem={({ item }) => <ExampleItem {...item} />}
-        keyExtractor={({ id }) => id.toString()}
-        contentContainerStyle={styles.listContent}
-      />
-    </View>
+    <FlatList
+      style={styles.list}
+      data={examples}
+      renderItem={({ item }) => <ExampleItem {...item} />}
+      keyExtractor={({ id }) => id.toString()}
+      contentContainerStyle={styles.listContent}
+    />
   );
 }
 
 export function Example() {
+  const [modalVisible, setModalVisible] = useState(false);
   return (
-    <SuspenseWithErrorBoundary>
-      <ExampleContainer />
-    </SuspenseWithErrorBoundary>
+    <View>
+      <Modal
+        header={"店舗選択"}
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        contentStyles={styles.content}
+      >
+        <SuspenseWithErrorBoundary>
+          <ExampleList />
+        </SuspenseWithErrorBoundary>
+      </Modal>
+
+      <Pressable onPress={() => setModalVisible(true)}>
+        <Text>Show Modal</Text>
+      </Pressable>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  content: {
+    width: Dimensions.get("window").width * 0.8,
+    height: Dimensions.get("window").height * 0.8,
+  },
+  list: {
     flex: 1,
-    padding: 12,
   },
   listContent: {
     display: "flex",
@@ -50,14 +65,12 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   item: {
-    backgroundColor: "ghostwhite",
-    padding: 20,
+    paddingTop: 12,
+    paddingBottom: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: "lightgray",
   },
   title: {
-    fontSize: 32,
-  },
-  body: {
     fontSize: 16,
-    color: "gray",
   },
 });

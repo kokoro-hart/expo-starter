@@ -1,14 +1,15 @@
-import Axios from "axios";
 import { Suspense } from "react";
-import type { PropsWithChildren, ReactNode } from "react";
+import type { ComponentProps, PropsWithChildren } from "react";
 import ErrorBoundary from "react-native-error-boundary";
+
+import { handleApiError } from "@/utils";
 
 import { Error } from "./Error";
 import { PageSpinner } from "./Spinner";
 
 type SuspenseWithErrorBoundaryProps = PropsWithChildren<{
-  loadingElement?: ReactNode;
-  fallbackComponent?: ReactNode;
+  loadingElement?: ComponentProps<typeof Suspense>["fallback"];
+  fallbackComponent?: ComponentProps<typeof ErrorBoundary>["FallbackComponent"];
 }>;
 
 export function SuspenseWithErrorBoundary({
@@ -20,22 +21,9 @@ export function SuspenseWithErrorBoundary({
     <ErrorBoundary
       FallbackComponent={
         fallbackComponent
-          ? () => <>{fallbackComponent}</>
+          ? fallbackComponent
           : ({ error }) => {
-              const errorMessage = (() => {
-                if (Axios.isAxiosError(error) && error.response?.data) {
-                  if (Array.isArray(error.response.data.error)) {
-                    error.response.data.error.forEach((e: string) => {
-                      return e;
-                    });
-                  } else {
-                    return error.response.data.error;
-                  }
-                } else if (error instanceof Error) {
-                  return error.message;
-                }
-              })();
-
+              const errorMessage = handleApiError(error, { silent: true });
               return <Error message={errorMessage} />;
             }
       }

@@ -1,6 +1,11 @@
 import Axios, { AxiosError } from "axios";
 
-export const handleApiError = (e: unknown | AxiosError, defaultError?: string) => {
+type handleApiErrorOptions = {
+  defaultMessage?: string;
+  silent?: boolean;
+};
+
+export const handleApiError = (e: unknown | AxiosError, options: handleApiErrorOptions) => {
   const errorMessage = (() => {
     if (Axios.isAxiosError(e) && e.response?.data) {
       if (Array.isArray(e.response.data.error)) {
@@ -12,10 +17,14 @@ export const handleApiError = (e: unknown | AxiosError, defaultError?: string) =
       }
     } else if (e instanceof Error) {
       return e.message;
-    } else if (defaultError) {
-      return defaultError;
+    } else if (options.defaultMessage) {
+      return options.defaultMessage;
     }
   })();
+
+  if (options.silent) {
+    return errorMessage;
+  }
 
   throw new Error(errorMessage);
 };
