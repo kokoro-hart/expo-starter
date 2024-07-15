@@ -21,15 +21,15 @@ export const handleApiError = (e: unknown | AxiosError, options: handleApiErrorO
     }
   })();
 
+  if (options.silent) {
+    return errorMessage;
+  }
+
   Toast.show({
     type: "error",
     text1: "エラーが発生しました",
     text2: errorMessage,
   });
-
-  if (options.silent) {
-    return errorMessage;
-  }
 
   console.error(e);
   throw new Error(errorMessage);
